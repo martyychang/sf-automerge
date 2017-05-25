@@ -32,6 +32,14 @@ global with sharing class MergeService {
     }
 
     /**
+     * @return the matching records, with all fields required to evaluate
+     *         and manage merge concerns
+     */
+    private String getQuery() {
+        return 'SELECT Id, Name, Phone, Fax, Website FROM Account WHERE Id IN :recordIds';
+    }
+
+    /**
      * @param masterRecord
      * @param mergedRecord
      */
@@ -69,10 +77,49 @@ global with sharing class MergeService {
      *
      * @param records
      */
+    public void mergeMany(List<Id> recordIds) {
+
+        // Get a map of matching records, so we can faithfully recreate
+        // the list of Sobject records in the necessary order.
+        // This means we do not assume that a query will return records
+        // in the same order as what's passed to the IN operator.
+        Map<Id, Sobject> recordMap = new Map<Id, Sobject>(
+                Database.query(this.getQuery()));
+
+        // Recreate the list of Sobject records in order, then merge away
+        List<Sobject> records = new List<Sobject>();
+
+        for (Id eachId : recordIds) {
+            records.add(recordMap.get(eachId));
+        }
+
+        this.mergeMany(records);
+    }
+
+    /**
+     * Given a list of records, assume that the first record is the master
+     * and that all subsequent records are duplicates that should be merged
+     * into the master record. With this list, perform the necessary merges.
+     *
+     * @param records
+     */
     public void mergeMany(List<Sobject> records) {
         Sobject masterRecord = records.remove(0);
         for (Sobject eachRecord : records) {
             this.mergeOne(masterRecord, eachRecord);
+        }
+    }
+
+    /**
+     * Given a list of lists, assume that each sublist is a list of records
+     * that should be processed by the overloaded `mergeMany` method.
+     * Perform all the necessary merges.
+     *
+     * @param recordLists
+     */
+    public void mergeMany(List<List<Id>> recordIdLists) {
+        for (List<Id> eachList : recordIdLists) {
+            this.mergeMany(eachList);
         }
     }
 
