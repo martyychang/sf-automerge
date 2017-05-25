@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>MergeConcern.AccountFax</members>
+        <members>MergeConcern.AccountPhone</members>
+        <members>MergeConcern.AccountWebsite</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>MergeConcern__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>MergeConcern__mdt-Merge Concern Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>MergeService</members>
+        <members>MergeServiceTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>39.0</version>
+</Package>

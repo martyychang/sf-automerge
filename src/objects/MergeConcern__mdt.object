@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Enumeration of fields that require special consideration when performing an automated merge operation in Apex</description>
+    <fields>
+        <fullName>FieldName__c</fullName>
+        <description>The full API name (including &quot;__c&quot; for custom fields) of the field under consideration</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>The full API name (including &quot;__c&quot; for custom fields) of the field under consideration</inlineHelpText>
+        <label>Field Name</label>
+        <length>40</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsForceOverwrite__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the victim value is always, unconditionally forced on to the surviving record</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Whether the victim value is always, unconditionally forced on to the surviving record</inlineHelpText>
+        <label>Force Overwrite</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SobjectName__c</fullName>
+        <description>The full API name (including &quot;__c&quot; for custom objects) of the object on which the field exists</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>The full API name (including &quot;__c&quot; for custom objects) of the object on which the field exists</inlineHelpText>
+        <label>Object Name</label>
+        <length>40</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Merge Concern</label>
+    <pluralLabel>Merge Concerns</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

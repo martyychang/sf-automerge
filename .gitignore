@@ -1,0 +1,25 @@
+# GitHub Pages
+docs/_site/
+
+# AppExchange apps (a.k.a. managed packages)
+Referenced Packages
+
+# Force.com IDE
+# The archive/ directory is a manually created directory by convention
+# for holding the project archives automatically created as part
+# of the deployment process.
+.settings/
+archive/
+.project
+salesforce.schema
+
+# MavensMate
+config/
+deploy/
+*.zip
+
+# Sublime Text
+*.sublime*
+
+# Mac OS X
+.DS_Store
