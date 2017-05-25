@@ -63,6 +63,33 @@ global with sharing class MergeService {
     }
 
     /**
+     * Given a list of records, assume that the first record is the master
+     * and that all subsequent records are duplicates that should be merged
+     * into the master record. With this list, perform the necessary merges.
+     *
+     * @param records
+     */
+    public void mergeMany(List<Sobject> records) {
+        Sobject masterRecord = records.remove(0);
+        for (Sobject eachRecord : records) {
+            this.mergeOne(masterRecord, eachRecord);
+        }
+    }
+
+    /**
+     * Given a list of lists, assume that each sublist is a list of records
+     * that should be processed by the overloaded `mergeMany` method.
+     * Perform all the necessary merges.
+     *
+     * @param recordLists
+     */
+    public void mergeMany(List<List<Sobject>> recordLists) {
+        for (List<Sobject> eachList : recordLists) {
+            this.mergeMany(eachList);
+        }
+    }
+
+    /**
      * @param sobjectName
      *
      * @return an instance of the service
