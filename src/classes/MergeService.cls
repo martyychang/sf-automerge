@@ -36,7 +36,22 @@ global with sharing class MergeService {
      *         and manage merge concerns
      */
     private String getQuery() {
-        return 'SELECT Id, Name, Phone, Fax, Website FROM Account WHERE Id IN :recordIds';
+
+        // Compile a list of the field names for merge concerns
+        List<String> fieldNames = new List<String> { 'Id', 'Name' };
+
+        for (MergeConcern__mdt eachConcern : this.concerns) {
+            fieldNames.add(eachConcern.FieldName__c);
+        }
+
+        String selectClause = 'SELECT ' + String.join(fieldNames, ', ');
+
+        // Return the fully constructed SOQL statement
+        return String.join(new List<String> {
+            selectClause,
+            'FROM Account',
+            'WHERE Id IN :recordIds'
+        }, ' ');
     }
 
     /**
