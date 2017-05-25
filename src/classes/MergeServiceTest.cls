@@ -55,16 +55,27 @@ private class MergeServiceTest {
         // Validate results
         Test.stopTest();
 
-        acmeCorp = [
-            SELECT Name, Website, Phone, Fax
+        List<Account> acmeAccounts = [
+            SELECT Id, Name, Website, Phone, Fax
             FROM Account
-            WHERE Id = :acmeCorp.Id
+            WHERE Name LIKE 'Acme%'
         ];
 
-        System.assertEquals('Acme Corporation (TEST)', acmeCorp.Name);
-        System.assertEquals('https://therealacme.test', acmeCorp.Website);
-        System.assertEquals('(800) BUY-ACME', acmeCorp.Phone);
-        System.assertEquals(null, acmeCorp.Fax);
+        System.assertEquals(1, acmeAccounts.size());
+        System.assertEquals(acmeCorp.Id, acmeAccounts[0].Id);
+        System.assertEquals('Acme Corporation (TEST)', acmeAccounts[0].Name);
+
+        if (hasCannedAccountWebsiteConcern()) {
+            System.assertEquals('https://therealacme.test', acmeAccounts[0].Website);
+        }
+
+        if (hasCannedAccountPhoneConcern()) {
+            System.assertEquals('(800) BUY-ACME', acmeAccounts[0].Phone);
+        }
+
+        if (hasCannedAccountFaxConcern()) {
+            System.assertEquals(null, acmeAccounts[0].Fax);
+        }
     }
 
     /**
@@ -178,9 +189,18 @@ private class MergeServiceTest {
         System.assertEquals(1, acmeAccounts.size());
         System.assertEquals(acmeCorp.Id, acmeAccounts[0].Id);
         System.assertEquals('Acme Corporation (TEST)', acmeAccounts[0].Name);
-        System.assertEquals('https://therealacme.test', acmeAccounts[0].Website);
-        System.assertEquals('(800) BUY-ACME', acmeAccounts[0].Phone);
-        System.assertEquals(null, acmeAccounts[0].Fax);
+
+        if (hasCannedAccountWebsiteConcern()) {
+            System.assertEquals('https://therealacme.test', acmeAccounts[0].Website);
+        }
+
+        if (hasCannedAccountPhoneConcern()) {
+            System.assertEquals('(800) BUY-ACME', acmeAccounts[0].Phone);
+        }
+
+        if (hasCannedAccountFaxConcern()) {
+            System.assertEquals(null, acmeAccounts[0].Fax);
+        }
 
         List<Account> zenAccounts = [
             SELECT Id, Name, Website, Phone, Fax
@@ -191,9 +211,18 @@ private class MergeServiceTest {
         System.assertEquals(1, zenAccounts.size());
         System.assertEquals(zenCorp.Id, zenAccounts[0].Id);
         System.assertEquals('Zenith Corporation (TEST)', zenAccounts[0].Name);
-        System.assertEquals('https://zenith.inc', zenAccounts[0].Website);
-        System.assertEquals('(800) GOOD-ZEN', zenAccounts[0].Phone);
-        System.assertEquals(null, zenAccounts[0].Fax);
+
+        if (hasCannedAccountWebsiteConcern()) {
+            System.assertEquals('https://zenith.inc', zenAccounts[0].Website);
+        }
+
+        if (hasCannedAccountPhoneConcern()) {
+            System.assertEquals('(800) GOOD-ZEN', zenAccounts[0].Phone);
+        }
+
+        if (hasCannedAccountFaxConcern()) {
+            System.assertEquals(null, zenAccounts[0].Fax);
+        }
     }
 
     /**
@@ -308,9 +337,18 @@ private class MergeServiceTest {
         System.assertEquals(1, acmeAccounts.size());
         System.assertEquals(acmeCorp.Id, acmeAccounts[0].Id);
         System.assertEquals('Acme Corporation (TEST)', acmeAccounts[0].Name);
-        System.assertEquals('https://therealacme.test', acmeAccounts[0].Website);
-        System.assertEquals('(800) BUY-ACME', acmeAccounts[0].Phone);
-        System.assertEquals(null, acmeAccounts[0].Fax);
+
+        if (hasCannedAccountWebsiteConcern()) {
+            System.assertEquals('https://therealacme.test', acmeAccounts[0].Website);
+        }
+
+        if (hasCannedAccountPhoneConcern()) {
+            System.assertEquals('(800) BUY-ACME', acmeAccounts[0].Phone);
+        }
+
+        if (hasCannedAccountFaxConcern()) {
+            System.assertEquals(null, acmeAccounts[0].Fax);
+        }
 
         List<Account> zenAccounts = [
             SELECT Id, Name, Website, Phone, Fax
@@ -321,8 +359,65 @@ private class MergeServiceTest {
         System.assertEquals(1, zenAccounts.size());
         System.assertEquals(zenCorp.Id, zenAccounts[0].Id);
         System.assertEquals('Zenith Corporation (TEST)', zenAccounts[0].Name);
-        System.assertEquals('https://zenith.inc', zenAccounts[0].Website);
-        System.assertEquals('(800) GOOD-ZEN', zenAccounts[0].Phone);
-        System.assertEquals(null, zenAccounts[0].Fax);
+
+        if (hasCannedAccountWebsiteConcern()) {
+            System.assertEquals('https://zenith.inc', zenAccounts[0].Website);
+        }
+
+        if (hasCannedAccountPhoneConcern()) {
+            System.assertEquals('(800) GOOD-ZEN', zenAccounts[0].Phone);
+        }
+
+        if (hasCannedAccountFaxConcern()) {
+            System.assertEquals(null, zenAccounts[0].Fax);
+        }
+    }
+
+    /**
+     * @return whether the canned Account: Website concern as defined in the
+     *         official repo is still in the user's org. This is used to
+     *         perform true validation for peace of mind to get 100% code
+     *         coverage as well in the official repo.
+     */
+    private static Boolean hasCannedAccountFaxConcern() {
+        return ![
+            SELECT Id
+            FROM MergeConcern__mdt
+            WHERE SobjectName__c = 'Account'
+            AND FieldName__c = 'Fax'
+            AND IsForceOverwrite__c = TRUE
+        ].isEmpty();
+    }
+
+    /**
+     * @return whether the canned Account: Website concern as defined in the
+     *         official repo is still in the user's org. This is used to
+     *         perform true validation for peace of mind to get 100% code
+     *         coverage as well in the official repo.
+     */
+    private static Boolean hasCannedAccountPhoneConcern() {
+        return ![
+            SELECT Id
+            FROM MergeConcern__mdt
+            WHERE SobjectName__c = 'Account'
+            AND FieldName__c = 'Phone'
+            AND IsForceOverwrite__c = FALSE
+        ].isEmpty();
+    }
+
+    /**
+     * @return whether the canned Account: Website concern as defined in the
+     *         official repo is still in the user's org. This is used to
+     *         perform true validation for peace of mind to get 100% code
+     *         coverage as well in the official repo.
+     */
+    private static Boolean hasCannedAccountWebsiteConcern() {
+        return ![
+            SELECT Id
+            FROM MergeConcern__mdt
+            WHERE SobjectName__c = 'Account'
+            AND FieldName__c = 'Website'
+            AND IsForceOverwrite__c = FALSE
+        ].isEmpty();
     }
 }
