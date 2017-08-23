@@ -38,7 +38,7 @@ global with sharing class MergeService {
     private String getQuery() {
 
         // Compile a list of the field names for merge concerns
-        List<String> fieldNames = new List<String> { 'Id', 'Name' };
+        List<String> fieldNames = new List<String> { 'Id' };
 
         for (MergeConcern__mdt eachConcern : this.concerns) {
             fieldNames.add(eachConcern.FieldName__c);
