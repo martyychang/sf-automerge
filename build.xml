@@ -1,0 +1,51 @@
+<project name="Force.com Migration Tool" default="compile" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <!-- This file should contain a single antlib.location property definition
+         which is used in the `taskdef` element below to identify the location
+         of the Force.com Migration Tool JAR file. -->
+    <property file="build.properties"/>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="${antlib.location}" />
+        </classpath>
+    </taskdef>
+
+    <!-- Deploy but do not run tests -->
+    <target name="compile">
+        <sf:deploy username="${sf.username}" password="${sf.password}" 
+                   serverurl="${sf.serverurl}"
+                   deployRoot="src"
+                   rollbackOnError="true"/>
+    </target>
+
+    <!-- Deploy and run local tests -->
+    <target name="deploy">
+        <sf:deploy username="${sf.username}" password="${sf.password}" 
+                   serverurl="${sf.serverurl}"
+                   deployRoot="src"
+                   testlevel="RunLocalTests"
+                   rollbackOnError="true"/>
+    </target>
+
+    <!-- Retrieve an unpackaged set of metadata from your org -->
+    <!-- The file src/package.xml lists what is to be retrieved -->
+    <target name="retrieve">
+        <sf:retrieve username="${sf.username}" password="${sf.password}"
+                     serverurl="${sf.serverurl}"
+                     retrieveTarget="src"
+                     unpackaged="src/package.xml"/>
+    </target>
+
+    <!-- Reconcile a package against a target org by deploying the
+         local package as-is, and then retrieving the same package
+         from the target org. This process would highlight problems
+         such as missing field permissions, etc. which would not
+         cause deployment to fail but would represent an incomplete
+         change to the code base. -->
+    <target name="reconcile" depends="deploy,retrieve">
+        <exec executable="git">
+            <arg value="status"/>
+        </exec>
+    </target>
+</project>

@@ -1,3 +1,7 @@
+# Force.com Migration Tool
+ant/
+build.properties
+
 # GitHub Pages
 docs/_site/
 
