@@ -49,7 +49,8 @@ global with sharing class MergeService {
         // Return the fully constructed SOQL statement
         return String.join(new List<String> {
             selectClause,
-            'FROM Account',
+            'FROM',
+            this.sobjectName,
             'WHERE Id IN :recordIds'
         }, ' ');
     }
